@@ -14,6 +14,14 @@ class CreateTransactionService {
   }
 
   public execute({ title, value, type }: RequestDto): Transaction {
+    if (
+      type === 'outcome' &&
+      value > this.transactionsRepository.getBalance().total
+    ) {
+      throw Error(
+        `The outcome value (${value}) can't be greater then income total ()`,
+      );
+    }
     return this.transactionsRepository.create({ title, value, type });
   }
 }
